@@ -20,7 +20,7 @@ const initialState = {
   answer: null,
   points: 0,
   highscore: 0,
-  secondRemaining: 10,
+  secondRemaining: null,
 };
 function reducer(state, action) {
   switch (action.type) {
@@ -53,10 +53,21 @@ function reducer(state, action) {
         highscore:
           state.points > state.highscore ? state.points : state.highscore,
       };
-    case "reset":
-      return { ...state, status: "ready", index: 0, answer: null, points: 0 };
+    case "resetart":
+      return {
+        ...state,
+        status: "ready",
+        index: 0,
+        answer: null,
+        points: 0,
+        highscore: 0,
+      };
     case "tick":
-      return { ...state, secondRemaining: state.secondRemaining - 1 };
+      return {
+        ...state,
+        secondRemaining: state.secondRemaining - 1,
+        status: state.secondRemaining === 0 ? "finished" : state.status,
+      };
     default:
       throw new Error("action unkown");
   }
@@ -113,6 +124,7 @@ function App() {
           </>
         )}
         {status === "finished" && (
+          // <div>hello</div>
           <FinishedScreen
             points={points}
             maxPassiblePoints={maxPassiblePoints}
