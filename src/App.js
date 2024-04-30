@@ -1,24 +1,25 @@
 import { useEffect, useReducer } from "react";
 import Header from "./Header.js";
 import Main from "./Main.js";
-import { type } from "@testing-library/user-event/dist/type/index.js";
+import Loader from "./Loader.js";
+import Error from "./Error.js";
 
 const initialState = {
   questions: [],
-  status: "Loading",
+  status: "loading",
 };
 function reducer(state, action) {
   switch (action.type) {
     case "dataReceived":
       return { ...state, questions: action.payload, status: "ready" };
     case "dataFailed":
-      return { ...state, status: "Error" };
+      return { ...state, status: "error" };
     default:
       throw new Error("action unkown");
   }
 }
 function App() {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [{ questions, status }, dispatch] = useReducer(reducer, initialState);
 
   useEffect(function () {
     fetch("http://localhost:9000/questions")
@@ -30,8 +31,8 @@ function App() {
     <div className="App">
       <Header />
       <Main>
-        <p>1/15</p>
-        <p>question?</p>
+        {status === "loading" && <Loader />}
+        {status === "error" && <Error />}
       </Main>
     </div>
   );
