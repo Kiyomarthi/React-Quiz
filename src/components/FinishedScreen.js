@@ -1,7 +1,10 @@
+import ResetButton from "./ResetButton";
+
 export default function FinishedScreen({
   points,
   maxPassiblePoints,
   highscore,
+  dispatch,
 }) {
   const percentage = (points / maxPassiblePoints) * 100;
   let emoji;
@@ -17,6 +20,7 @@ export default function FinishedScreen({
         {Math.ceil(percentage)}%)
       </p>
       <p className="highscore">highscore: {highscore} points </p>
+      <ResetButton dispatch={dispatch} />
     </>
   );
 }
